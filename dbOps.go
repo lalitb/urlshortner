@@ -10,6 +10,7 @@ func main() {
     db := initDB();
     id := insertLongURL(db, "test");
     fmt.Println(id);
+    fmt.Println(getLongURL(db, id));
 
 }
 func initDB() *sql.DB{
