@@ -8,20 +8,6 @@ import (
 
 var encodeStr string = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-func main_test() {
-	fmt.Println("Hello, playground");
-	fmt.Println(get_shortUrl(2234));
-	fmt.Println(convertFromBase36(get_shortUrl(2234)));
-}
-
-func get_shortUrl( value int64) string {
-	return convertToBase36(value);
-}
-
-func get_longUrl ( str string) int64 {
-	return convertFromBase36(str);
-}
-
 func convertToBase36(value int64) string {
 	var buffer bytes.Buffer;
 	for (value > 0 ) {

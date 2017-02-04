@@ -5,8 +5,8 @@ import (
    "net/http"
    "io/ioutil"
    "io"
-   "fmt"
 )
+
 type LongUrl struct{
     Url string  `json:"url"`
 }
@@ -35,10 +35,9 @@ func shortenUrl( w http.ResponseWriter, r *http.Request ) {
             panic(err)
         }
     }
-    db := InitDB()
+    db := OpenDB()
     defer db.Close()
     id :=  insertLongUrl(db, longUrl.Url)
-    fmt.Printf("%d",id)
     short := convertToBase36(id)
     short = "http://" + short
     s := ShortUrl{Short:short}
@@ -52,7 +51,6 @@ func shortenUrl( w http.ResponseWriter, r *http.Request ) {
 }
 
 func originalUrl( w http.ResponseWriter, r *http.Request) {
- //   vars := mux.Vars(r)
     body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
     var shortUrl ShortUrl
     if err != nil {
@@ -68,11 +66,10 @@ func originalUrl( w http.ResponseWriter, r *http.Request) {
             panic(err)
         }
     }
-    db := InitDB()
+    db := OpenDB()
     defer db.Close()
     short := shortUrl.Short[7:len(shortUrl.Short)]
     id := convertFromBase36(short)
-    fmt.Printf("ID IS %d SHORT IS : %s", id, short)
     long := getLongUrl(db, id)
     orig := OriginalUrl{Original:long}
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")

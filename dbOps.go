@@ -1,20 +1,30 @@
 package main
 import(
     "database/sql"
-    "fmt"
     _ "github.com/mattn/go-sqlite3"
     "log"
 )
 
-func main_test1() {
-    db := InitDB();
-    id := insertLongUrl(db, "test");
-    fmt.Println(id);
-    fmt.Println(getLongUrl(db, id));
-
+func InitDB() {
+    db := OpenDB();
+    rows, err := db.Query(" SELECT COUNT(*) FROM  sqlite_master WHERE  name= 'urls'")
+    checkError(err);
+    defer rows.Close()
+    var id = 0;
+    rows.Next()
+    err = rows.Scan(&id)
+    checkError(err)
+    if (id == 0 ){
+        _, err1 := db.Exec( `CREATE TABLE urls (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                longurl text )` )
+        checkError(err1)
+        _, err2 := db.Exec("INSERT INTO sqlite_sequence VALUES('urls',10000000)")
+        checkError(err2)
+    }
 }
-func InitDB() *sql.DB{
 
+func OpenDB() *sql.DB{
    db, err := sql.Open("sqlite3", "./urldb.sqlite");
    checkError(err);
    return db;
@@ -22,13 +32,10 @@ func InitDB() *sql.DB{
 }
 
 func insertLongUrl(db *sql.DB, longUrl string) int64 {
-
-    fmt.Printf("test")
     stmt, err := db.Prepare("INSERT INTO urls(longUrl) values(?)");
     checkError(err);
     defer stmt.Close();
     _, err = stmt.Exec(longUrl);
-    fmt.Printf("test" + longUrl)
     checkError(err);
     stmt, err = db.Prepare("SELECT MAX(ID) FROM urls WHERE longUrl = ?")
     var id int64 = -1
@@ -37,7 +44,6 @@ func insertLongUrl(db *sql.DB, longUrl string) int64 {
     defer rows.Close()
     rows.Next()
     err2 := rows.Scan(&id)
-    fmt.Printf("Test: %d", id)
     checkError(err2);
     return id
 
