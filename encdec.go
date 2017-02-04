@@ -8,17 +8,17 @@ import (
 
 var encodeStr string = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-func main() {
+func main_test() {
 	fmt.Println("Hello, playground");
-	fmt.Println(get_shortURL(2234));
-	fmt.Println(convertFromBase36(get_shortURL(2234)));
+	fmt.Println(get_shortUrl(2234));
+	fmt.Println(convertFromBase36(get_shortUrl(2234)));
 }
 
-func get_shortURL( value int64) string {
+func get_shortUrl( value int64) string {
 	return convertToBase36(value);
 }
 
-func get_longURL ( str string) int64 {
+func get_longUrl ( str string) int64 {
 	return convertFromBase36(str);
 }
 

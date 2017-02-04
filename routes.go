@@ -5,22 +5,22 @@ import (
     "github.com/gorilla/mux"
 )
 
-type route struct {
-    name    string
-    method  string
-    pattern string
+type Route struct {
+    Name    string
+    Method  string
+    Pattern string
     HandlerFunc http.HandlerFunc
 }
 
-type routes []route
+type Routes []Route
 
 func NewRouter() *mux.Router {
     router := mux.NewRouter().StrictSlash(true)
     for _, route := range routes {
-        router.Methods(route.method).
-              .Path(route.pattern).
-              .Name(route.name).
-              .Handler(route.HandlerFunc)
+        router.Methods(route.Method).
+              Path(route.Pattern).
+              Name(route.Name).
+              Handler(route.HandlerFunc)
     }
     return router
 }
@@ -30,12 +30,12 @@ var routes = Routes {
         "shorten",
         "POST",
         "/shorten",
-        hortenURL
+        shortenUrl,
     },
     Route{
         "original",
         "POST",
         "/original",
-        originalURL
+        originalUrl,
     },
 }

@@ -6,43 +6,50 @@ import(
     "log"
 )
 
-func main() {
-    db := initDB();
-    id := insertLongURL(db, "test");
+func main_test1() {
+    db := InitDB();
+    id := insertLongUrl(db, "test");
     fmt.Println(id);
-    fmt.Println(getLongURL(db, id));
+    fmt.Println(getLongUrl(db, id));
 
 }
-func initDB() *sql.DB{
+func InitDB() *sql.DB{
 
    db, err := sql.Open("sqlite3", "./urldb.sqlite");
    checkError(err);
    return db;
-  // defer db.Close()
 
 }
 
-func insertLongURL(db *sql.DB, longURL string) int64 {
+func insertLongUrl(db *sql.DB, longUrl string) int64 {
 
-    stmt, err := db.Prepare("INSERT INTO urls(longURL) values(?)");
+    fmt.Printf("test")
+    stmt, err := db.Prepare("INSERT INTO urls(longUrl) values(?)");
     checkError(err);
     defer stmt.Close();
-    res, err := stmt.Exec(longURL);
+    _, err = stmt.Exec(longUrl);
+    fmt.Printf("test" + longUrl)
     checkError(err);
-    id, err := res.LastInsertId()
-    checkError(err);
+    stmt, err = db.Prepare("SELECT MAX(ID) FROM urls WHERE longUrl = ?")
+    var id int64 = -1
+    rows, err1 := stmt.Query(longUrl);
+    checkError(err1)
+    defer rows.Close()
+    rows.Next()
+    err2 := rows.Scan(&id)
+    fmt.Printf("Test: %d", id)
+    checkError(err2);
     return id
 
 }
 
-func getLongURL(db *sql.DB, id int64) string {
-    var longURL string;
-    stmt, err := db.Prepare("SELECT longURL FROM urls WHERE rowid = ?")
+func getLongUrl(db *sql.DB, id int64) string {
+    var longUrl string;
+    stmt, err := db.Prepare("SELECT longURL FROM urls WHERE ID = ?")
     checkError(err);
     defer stmt.Close()
-    err = stmt.QueryRow(id).Scan(&longURL);
-    return longURL ;
-
+    err = stmt.QueryRow(id).Scan(&longUrl);
+    return longUrl ;
 }
 
 func checkError(err error) {
