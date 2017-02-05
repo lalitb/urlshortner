@@ -19,6 +19,7 @@ CLIENT  -------------->   |     WEB SERVER    |        |  SQLITE    |
 						   
                
 Steps for URL Shortening:
+
 ------------------------
 
 1. Client sends HTTP/POST request to Web Server with "LongURL" 
@@ -49,27 +50,36 @@ DISTRIB_DESCRIPTION="Ubuntu 16.04.1 LTS"
 
 3. Steps to perform in bare linux machine:
      -> Install Docker ( refer to link  https://docs.docker.com/engine/installation/ for installation instructions. ).
-     -> Pull the image:          
+     -> Pull the image: 
+     
 		$ sudo docker pull lalitbhasin123/urlshortner
+		
       -> Validate that the docker image is downloaded, and available locally:
+      
       		$  sudo docker images
+		
       -> Run the Web application through docker image:
+      
       		$  sudo docker run --publish 8080:8080 --name test --rm lalitbhasin123/urlshortner
+		
 	The urlshortner web application is now running locally on port 8080
 	
 
 Testing using curl:
 -------------------
  1. Execute below command locally on the machine to create the short url:
+ 
          $ curl -sX POST -H 'Content-Type: application/json' 'localhost:8080/shorten' -d '{"url":"http://a.very.long.url"}'
          {"short":"http://5yc1u"}
 	 
  2. Execute below command locally on the machine to get the original url:
+ 
          $ curl -sX POST -H 'Content-Type: application/json' 'localhost:8080/original' -d '{"short":"http://5yc1u"}'
          {"original":"http://a.very.long.url"}
 	 
 3. To run the unit test cases:
 	-> Login to the running docker image:
+	
 	      $ sudo docker exec -i -t test '/bin/bash'
 	      root@fa83f7337833:/go/src/app# go test
               PASS
@@ -78,6 +88,7 @@ Testing using curl:
 	      $
 	   
 4. To stop the running docker image:
+
 	$  sudo docker stop test
 
 
