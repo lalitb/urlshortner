@@ -17,7 +17,6 @@
 						   
                
 Steps for URL Shortening:
-
 ------------------------
 
 1. Client sends HTTP/POST request to Web Server with "LongURL" 
@@ -47,7 +46,8 @@ DISTRIB_DESCRIPTION="Ubuntu 16.04.1 LTS"
 2. The Docker image for application is published in docker hub ( lalitbhasin123/urlshortner ). The image was created using golang:onbuild image (https://hub.docker.com/_/golang/) .
 
 3. Steps to perform in bare linux machine:
-     -> Install Docker ( refer to link  https://docs.docker.com/engine/installation/ for installation instructions. ).
+     -> Install Docker ( refer to link  https://docs.docker.com/engine/installation/ for installation instructions. )
+     
      -> Pull the image: 
      
 		$ sudo docker pull lalitbhasin123/urlshortner
@@ -76,7 +76,7 @@ Testing using curl:
          {"original":"http://a.very.long.url"}
 	 
 3. To run the unit test cases:
-	-> Login to the running docker image:
+	-> Login to the running docker image, and run the test suite:
 	
 	      $ sudo docker exec -i -t test '/bin/bash'
 	      root@fa83f7337833:/go/src/app# go test
