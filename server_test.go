@@ -7,6 +7,7 @@ import (
     "net/http/httptest"
     "os"
     "strings"
+    "fmt"
 )
 
 func TestEncode(t *testing.T) {
@@ -53,8 +54,8 @@ func TestShortenURL(t *testing.T){
 }
 
 func TestOriginalURL(t *testing.T){
-    var jsonStr = []byte(`{"url":"http://5yc1t"}`)
-    req, _ := http.NewRequest("GET", "/original", bytes.NewBuffer(jsonStr ))
+    var jsonStr = []byte(`{"short":"http://5yc1t"}`)
+    req, _ := http.NewRequest("POST", "/original", bytes.NewBuffer(jsonStr ))
     req.Header.Set("Content-Type", "application/json")
     rr := httptest.NewRecorder()
     handler := http.HandlerFunc(originalUrl)
@@ -62,7 +63,7 @@ func TestOriginalURL(t *testing.T){
     if (rr.Code != 200) {
         t.Error("TestShortenUrl Failed")
     }
-    expected := `{"short":"http://averylongurl"}`
+    expected := `{"original":"http://averylongurl"}`
     actual := strings.Trim(rr.Body.String(),"\n")
     if (actual != expected) {
          t.Errorf("TestShortenUrl Failed, Expected:%s: Got:%s:", expected, actual);
@@ -71,11 +72,4 @@ func TestOriginalURL(t *testing.T){
 
 func LastFunction(t *testing.T){
     os.Remove("./urldb.sqlite");
-
 }
-
-
-            
-
-
-
