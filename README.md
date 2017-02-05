@@ -65,7 +65,7 @@ Testing using curl:
          {"short":"http://5yc1u"}
 	 
  2. Execute below command locally on the machine to get the original url:
-         $ curl -sX POST -H 'Content-Type: application/json' 'localhost:6060/original' -d '{"short":"http://5yc1u"}'
+         $ curl -sX POST -H 'Content-Type: application/json' 'localhost:8080/original' -d '{"short":"http://5yc1u"}'
          {"original":"http://a.very.long.url"}
 	 
 3. To run the unit test cases:
