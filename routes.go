@@ -30,12 +30,12 @@ var routes = Routes {
         "shorten",
         "POST",
         "/shorten",
-        shortenUrl,
+        ShortenUrlHandler,
     },
     Route{
         "original",
         "POST",
         "/original",
-        originalUrl,
+        OriginalUrlHandler,
     },
 }

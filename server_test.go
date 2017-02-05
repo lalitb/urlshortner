@@ -7,12 +7,11 @@ import (
     "net/http/httptest"
     "os"
     "strings"
-    "fmt"
 )
 
 func TestEncode(t *testing.T) {
     expected := "5yc1t"
-    actual := convertToBase36(10000001)
+    actual := ConvertToBase36(10000001)
     if (actual != expected){
         t.Error("TestEncode Failed")
     }
@@ -20,7 +19,7 @@ func TestEncode(t *testing.T) {
 
 func TestDecode(t *testing.T){
     var expected int64 = 45000012
-    actual := convertFromBase36("qsi8c")
+    actual := ConvertFromBase36("qsi8c")
     if (actual != expected){
         t.Error("TestDecode Failed")
     }
@@ -28,20 +27,20 @@ func TestDecode(t *testing.T){
 
 func TestEncodeDecode(t *testing.T){
     var expected int64 = 45000012
-    actual := convertFromBase36(convertToBase36(expected))
+    actual := ConvertFromBase36(ConvertToBase36(expected))
     if ( actual != expected ){
         t.Error("TestEncodeDecode Failed")
     }
 }
 
-func TestShortenURL(t *testing.T){
+func TestShortenURLHandler(t *testing.T){
     os.Remove("./urldb.sqlite");
     InitDB()
     var jsonStr = []byte(`{"url":"http://averylongurl"}`)
     req, _ := http.NewRequest("POST", "/shorten", bytes.NewBuffer(jsonStr ))
     req.Header.Set("Content-Type", "application/json")
     rr := httptest.NewRecorder()
-    handler := http.HandlerFunc(shortenUrl)
+    handler := http.HandlerFunc(ShortenUrlHandler)
     handler.ServeHTTP(rr, req)
     if (rr.Code != 200) {
         t.Error("TestShortenUrl Failed")
@@ -53,12 +52,12 @@ func TestShortenURL(t *testing.T){
     }
 }
 
-func TestOriginalURL(t *testing.T){
+func TestOriginalURLHandler(t *testing.T){
     var jsonStr = []byte(`{"short":"http://5yc1t"}`)
     req, _ := http.NewRequest("POST", "/original", bytes.NewBuffer(jsonStr ))
     req.Header.Set("Content-Type", "application/json")
     rr := httptest.NewRecorder()
-    handler := http.HandlerFunc(originalUrl)
+    handler := http.HandlerFunc(OriginalUrlHandler)
     handler.ServeHTTP(rr, req)
     if (rr.Code != 200) {
         t.Error("TestShortenUrl Failed")

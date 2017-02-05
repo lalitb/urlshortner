@@ -19,7 +19,7 @@ type OriginalUrl struct{
     Original string `json:"original"`
 }
 
-func shortenUrl( w http.ResponseWriter, r *http.Request ) {
+func ShortenUrlHandler( w http.ResponseWriter, r *http.Request ) {
     var longUrl LongUrl
     body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
     if err != nil {
@@ -37,8 +37,8 @@ func shortenUrl( w http.ResponseWriter, r *http.Request ) {
     }
     db := OpenDB()
     defer db.Close()
-    id :=  insertLongUrl(db, longUrl.Url)
-    short := convertToBase36(id)
+    id :=  InsertLongUrl(db, longUrl.Url)
+    short := ConvertToBase36(id)
     short = "http://" + short
     s := ShortUrl{Short:short}
 
@@ -50,7 +50,7 @@ func shortenUrl( w http.ResponseWriter, r *http.Request ) {
     return
 }
 
-func originalUrl( w http.ResponseWriter, r *http.Request) {
+func OriginalUrlHandler( w http.ResponseWriter, r *http.Request) {
     body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
     var shortUrl ShortUrl
     if err != nil {
@@ -69,8 +69,8 @@ func originalUrl( w http.ResponseWriter, r *http.Request) {
     db := OpenDB()
     defer db.Close()
     short := shortUrl.Short[7:len(shortUrl.Short)]
-    id := convertFromBase36(short)
-    long := getLongUrl(db, id)
+    id := ConvertFromBase36(short)
+    long := GetLongUrl(db, id)
     orig := OriginalUrl{Original:long}
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusOK)
