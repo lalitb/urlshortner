@@ -6,14 +6,15 @@ import(
 )
 
 func InitDB() {
-    db := OpenDB();
+    db := OpenDB()
     rows, err := db.Query(" SELECT COUNT(*) FROM  sqlite_master WHERE  name= 'urls'")
     checkError(err);
-    defer rows.Close()
+    defer db.Close()
     var id = 0;
     rows.Next()
     err = rows.Scan(&id)
     checkError(err)
+    rows.Close()
     if (id == 0 ){
         _, err1 := db.Exec( `CREATE TABLE urls (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
