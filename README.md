@@ -1,6 +1,6 @@
   # BLOCK DIAGRAM:
  
-'''				   
+				   
    		                 -------------------
 	        HTTP/POST       |                   |         ------------
      CLIENT  -------------->    |     WEB SERVER    |        |  SQLITE    | 
@@ -14,7 +14,7 @@
 		               |                   | 
 		               |   BASE-36 ENCODER |
 			        -------------------
-'''						   
+					   
                
 # Steps for URL Shortening:
 
