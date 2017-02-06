@@ -1,6 +1,6 @@
-   BLOCK DIAGRAM:
-  ----------------
-				   
+  # BLOCK DIAGRAM:
+ 
+'''				   
    		                 -------------------
 	        HTTP/POST       |                   |         ------------
      CLIENT  -------------->    |     WEB SERVER    |        |  SQLITE    | 
@@ -14,25 +14,23 @@
 		               |                   | 
 		               |   BASE-36 ENCODER |
 			        -------------------
-						   
+'''						   
                
-Steps for URL Shortening:
-------------------------
+# Steps for URL Shortening:
 
 1. Client sends HTTP/POST request to Web Server with "LongURL" 
 2. Web Server inserts "LongURL" to sqlite database and gets autoIncrement ID for that row.
 3. Web Server encodes the ID into base-36, prefix "http://" to the result,  and returns the result back to Client as Short-URL.
 
 
-Steps for getting Original URL:
------------------------
+# Steps for getting Original URL:
 
-1. Client sends HTTP/POST request to Web Server with "ShortURL"
+
+ 1. Client sends HTTP/POST request to Web Server with "ShortURL"
 2. Web Server removes the "http://" prefix from the "ShortURL", and decodes it using Base-36 decoding. Result is ID ( integer value)
 3. Web Server fetches the "LongURL" corresponding to the ID ( from step 2) from sqlite database, and returns the result back to client as Original-URL.
 
-Deployment Steps for urlshortner Docker image:
----------------------------------------------
+# Deployment Steps for urlshortner Docker image:
 
 1. This has been tested in below linux distro, but it should work in any linux distro:
 
@@ -63,8 +61,8 @@ DISTRIB_DESCRIPTION="Ubuntu 16.04.1 LTS"
 	The urlshortner web application is now running locally on port 8080
 	
 
-Testing using curl:
--------------------
+# Testing using curl:
+
  1. Execute below command locally on the machine to create the short url:
  
          $ curl -sX POST -H 'Content-Type: application/json' 'localhost:8080/shorten' -d '{"url":"http://a.very.long.url"}'
@@ -88,12 +86,4 @@ Testing using curl:
 4. To stop the running docker image:
 
 	$  sudo docker stop test
-
-
-
-		
-
 	
- 
- 
-
